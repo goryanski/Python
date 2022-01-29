@@ -1,0 +1,55 @@
+Тема: Python.
+
+Задание:Создайте «командную строку» на 3-4 команды.
+
+
+import os
+
+print('Welcome to Command Line "SuperCL"\nEnter command "help" to see all available commands')
+isExit = False
+while not isExit:
+    command = input('new command-> ')
+    if command == 'help':
+        print('help -> show all exists commands\n'
+              'createF -> creates file with the given name. Example: createF file.txt\n'
+              'createD -> creates directory with the given name. Example: createD newDirectory\n'
+              'readF -> reads file with the given name. Example: readF file.txt\n'
+              'exit -> finish program\n')
+    elif command == 'exit':
+        isExit = True
+    else:
+        if command.find(' ') == -1:
+            print('wrong command')
+        else:
+            spaceIdx = command.find(' ')
+            commandWord = command[:spaceIdx]  # from start to space
+            argument = command[spaceIdx + 1:]  # from space (without space) to end of the string
+            if commandWord == 'createF':
+                if not os.path.exists(argument):
+                    try:
+                        f = open(argument, 'x')
+                        f.close()
+                        print(f'file {argument} was created')
+                    except OSError:
+                        print("Could not create file:", argument)
+                else:
+                    print('this file already exists')
+            elif commandWord == 'createD':
+                try:
+                    os.mkdir(argument)
+                    print(f'directory {argument} was created')
+                except OSError:
+                    print("Could not create directory:", argument)
+            elif commandWord == 'readF':
+                if os.path.exists(argument):
+                    try:
+                        f = open(argument, 'r')
+                        print(f'file {argument} has content:')
+                        print(f.read())
+                        f.close()
+                    except OSError:
+                        print("Could not read file:", argument)
+                else:
+                    print('this file does not exists')
+            else:
+                print('wrong command')

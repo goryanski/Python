@@ -1,0 +1,83 @@
+Тема: Python.
+
+Задание: Сделать простую «камень-ножницы-бумага», с записью результата в файл и возможностью просмотра результатов из файла.
+
+
+import random
+import os
+from datetime import datetime
+
+isRepeatGame = True
+while isRepeatGame:
+    # create file with game results
+    if not os.path.exists('gameResults.txt'):
+        f = open("gameResults.txt", "x")
+        f.close()
+
+    # gamer move
+    isGamerMove = False
+    gamerMove = 0
+    while not isGamerMove:
+        gamerMove = int(input('1 - stone, 2 - scissors, 3 - paper\n>>> '))
+        if gamerMove == 1 or gamerMove == 2 or gamerMove == 3:
+            isGamerMove = True
+
+    # computer move
+    compMove = random.randint(1, 3)
+    compChoise = ''
+    if compMove == 1:
+        compChoise = 'stone'
+    if compMove == 2:
+        compChoise = 'scissors'
+    if compMove == 3:
+        compChoise = 'paper'
+
+    # show moves info
+    if gamerMove == 1:
+        print('your stone vs computer', compChoise)
+    if gamerMove == 2:
+        print('your scissors vs computer', compChoise)
+    if gamerMove == 3:
+        print('your paper vs computer', compChoise)
+
+    # define winner
+    winner = 'no one'
+    if gamerMove == 1 and compMove == 2:
+        winner = 'gamer'
+    if gamerMove == 1 and compMove == 3:
+        winner = 'computer'
+    if gamerMove == 2 and compMove == 1:
+        winner = 'computer'
+    if gamerMove == 2 and compMove == 3:
+        winner = 'gamer'
+    if gamerMove == 3 and compMove == 1:
+        winner = 'gamer'
+    if gamerMove == 3 and compMove == 2:
+        winner = 'computer'
+
+    print('winner:', winner)
+
+    # write results to file
+    f = open('gameResults.txt', 'a')
+    f.write(f'Date: {datetime.now()} >>> winner: {winner}\n')
+    f.close()
+
+    showFileContent = int(input('\nDo you want to see all games statistic? 1 - yes, any digit button - no\n>>> '))
+    if showFileContent == 1:
+        f = open("gameResults.txt", "r")
+        print(f.read())
+        f.close()
+
+    # define if game will continue
+    isGamerMove = False
+    isRepeatGame = False
+    gamerMove = 0
+    while not isGamerMove:
+        gamerMove = int(input('\nDo you want to play one more time? 1 - yes, 2 - no\n>>> '))
+        if gamerMove == 1 or gamerMove == 2:
+            isGamerMove = True
+            if gamerMove == 1:
+                isRepeatGame = True
+            if gamerMove == 2:
+                isRepeatGame = False
+                print('Game over')
